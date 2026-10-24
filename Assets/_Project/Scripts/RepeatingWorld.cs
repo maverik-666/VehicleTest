@@ -2,7 +2,7 @@ namespace Project
 {
     using Reflex.Attributes;
     using UnityEngine;
-    
+
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Transform))]
     public class RepeatingWorld : MonoBehaviour
@@ -22,17 +22,6 @@ namespace Project
         {
             _player = player;
             _startPos = _player.Position.z;
-            CreateChunks();
-        }
-
-        private void CreateChunks()
-        {
-            _chunk.localPosition = new Vector3(0, 0, 0);
-            for (int i = 0; i < 2; i++)
-            {
-                var chunk = Instantiate(_chunk, transform);
-                chunk.localPosition = new Vector3(0, 0, _chunkSize * (i+1));
-            }
         }
         
         private void LateUpdate()
