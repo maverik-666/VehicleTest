@@ -10,6 +10,8 @@ namespace Project
     {
         private Player _player;
         private BehaviorGraphAgent _agent;
+
+        public Vector3 Position => transform.position;
         
         [Inject]
         private void Construct(Player player)
@@ -20,9 +22,15 @@ namespace Project
             _agent.BlackboardReference.SetVariableValue("Player", player.gameObject);
         }
 
+        public void StartPatrol()
+        { 
+            _agent.BlackboardReference.SetVariableValue("CanPatrol", true);
+        }
+        
         public void Reset()
         {
-            
+            _agent.BlackboardReference.SetVariableValue("CanPatrol", false);
+            _agent.Restart();
         }
     }
 }

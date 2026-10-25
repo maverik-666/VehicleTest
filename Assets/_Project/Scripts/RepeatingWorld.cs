@@ -27,7 +27,7 @@ namespace Project
         private void LateUpdate()
         {
             float delta = _player.Position.z - _startPos;
-            float positionZ = 75 * (Mathf.RoundToInt(delta / 75)-1);
+            float positionZ = 75 * (Mathf.RoundToInt(delta / 75));
             transform.position = new Vector3(0, 0, positionZ);
         } 
     }

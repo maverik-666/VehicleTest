@@ -13,6 +13,9 @@ namespace Project
         {
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<Player>(true),
                 Lifetime.Scoped, Resolution.Eager);
+
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<EnemyFactory>(true),
+                Lifetime.Scoped, Resolution.Eager);
         }
     }
 }
