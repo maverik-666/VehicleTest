@@ -7,12 +7,13 @@ namespace Project
     public class VehicleSkinRenderer : MonoBehaviour
     {
         [SerializeField]
+        private Renderer[] _renderers;
+        
+        [SerializeField]
         private Transform[] _wheels;
 
         [SerializeField]
         private float _rotationSpeed = 30;
-
-        
         
         public void AnimateMovement()
         {
@@ -29,7 +30,7 @@ namespace Project
 
         public void AnimateDeath()
         {
-            
+         
         }
     }
 }

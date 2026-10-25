@@ -13,11 +13,18 @@ namespace Project
         {
             Random.InitState(0);
             
-            containerBuilder.RegisterFactory(_ => new EnemyRegistry(50), Lifetime.Scoped, Resolution.Eager);
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<Camera>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<InputSystem>(true),
+                Lifetime.Scoped, Resolution.Eager);
             
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<Player>(true),
                 Lifetime.Scoped, Resolution.Eager);
-
+            
+            containerBuilder.RegisterFactory(_ => new EnemyRegistry(50), 
+                Lifetime.Scoped, Resolution.Eager);
+            
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<EnemyFactory>(true),
                 Lifetime.Scoped, Resolution.Eager);
             
@@ -25,6 +32,9 @@ namespace Project
                 Lifetime.Scoped, Resolution.Eager);
             
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<GameFlowController>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<ProjectileFactory>(true),
                 Lifetime.Scoped, Resolution.Eager);
         }
     }

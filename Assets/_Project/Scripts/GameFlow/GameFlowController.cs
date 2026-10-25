@@ -7,7 +7,8 @@ namespace Project
     [RequireComponent(typeof(Transform))]
     public class GameFlowController : MonoBehaviour
     {
-
+        
+        
         private EnemySpawner _enemySpawner;
         private Player _player;
         
@@ -22,12 +23,12 @@ namespace Project
         public void StartGame()
         {
             _enemySpawner.EnablePatrol();
-            _player.StartMoving();
+            _player.Activate();
         }
         
         public void PlayerDeath()
         {
-            
+            _enemySpawner.DisablePatrol();
         }
     }
 }

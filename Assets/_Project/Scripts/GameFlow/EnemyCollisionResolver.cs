@@ -5,7 +5,7 @@ namespace Project
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Transform))]
-    public class EnemyCollisionUseCase : MonoBehaviour
+    public class EnemyCollisionResolver : MonoBehaviour
     {
         [SerializeField]
         private float _collisionDistance = 2;

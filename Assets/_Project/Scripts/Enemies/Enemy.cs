@@ -14,6 +14,9 @@ namespace Project
 
         [SerializeField]
         private int _attackDamage = 15;
+
+        [SerializeField]
+        private float _size = 0.5f;
         
         private Action<Enemy> _returnToPool;
         
@@ -22,7 +25,9 @@ namespace Project
         private EnemySkinRenderer _skinRenderer;
 
         public Vector3 Position => transform.position;
-        
+
+        public float Size => _size;
+
         public bool IsDead => _health.IsDead;
         
         public void Init(Player player, Action<Enemy> returnToPool)
@@ -67,7 +72,7 @@ namespace Project
 
             if (_health.IsDead)
             {
-                _skinRenderer.AnimateDeath();
+                Die();
             }
         }
         

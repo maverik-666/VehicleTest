@@ -1,6 +1,5 @@
 namespace Project
 {
-    using NaughtyAttributes.Test;
     using Reflex.Attributes;
     using UnityEngine;
 
@@ -12,17 +11,22 @@ namespace Project
 
         private GameFlowController _gameFlowController;
         private Vehicle _vehicle;
-        
+        private Turret _turret;
+
+        private bool _isAiming;
+
         [Inject]
         private void Construct(GameFlowController gameFlowController)
         {
             _gameFlowController = gameFlowController;
             _vehicle = GetComponent<Vehicle>();
+            _turret = GetComponentInChildren<Turret>(true);
         }
 
-        public void StartMoving()
+        public void Activate()
         {
             _vehicle.StartMoving();
+            _turret.StartShooting();
         }
 
         public void TakeDamage(int damage)
@@ -31,9 +35,20 @@ namespace Project
 
             if (_vehicle.IsDead)
             {
-                _vehicle.Die();
-                _gameFlowController.PlayerDeath();
+                Die();
             }
+        }
+
+        private void Die()
+        {
+            _vehicle.Die();
+            _turret.StopShooting();
+            _gameFlowController.PlayerDeath();
+        }
+
+        public void SetAim(Vector3 direction)
+        {
+            _turret.SetAim(direction);
         }
     }
 }
