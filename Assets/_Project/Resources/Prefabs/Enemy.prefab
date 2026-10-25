@@ -47,6 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0a8134f78349feae31f7d3ea5185c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Enemy
+  _health:
+    _current: 100
+    _max: 100
+  _attackDamage: 15
 --- !u!114 &5570745970038030851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +68,7 @@ MonoBehaviour:
   - rid: 4860037663547195793
   - rid: 4860037669617140324
   - rid: 4860037669617140326
+  - rid: 4860037686653616360
   m_OriginalGraph: {fileID: -4712897888489313030, guid: ea0af42c8e36d594db4fb034944d8984, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -94,6 +99,14 @@ MonoBehaviour:
           m_Value1: 1359198594303956993
         Name: PartolRadius
         m_Value: 3
+    - rid: 4860037686653616360
+      type: {class: 'BlackboardVariable`1[[Project.Enemy, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1714439713019398753
+          m_Value1: 9828134723137429211
+        Name: Enemy
+        m_Value: {fileID: 3495997663914149374}
 --- !u!195 &2411975342763726920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -394,7 +407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
       propertyPath: m_Name
-      value: Stickman
+      value: Enemy Skin Renderer
       objectReference: {fileID: 0}
     - target: {fileID: 1330755669629619180, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -587,13 +600,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1748893211158611721}
   m_SourcePrefab: {fileID: 100100000, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
 --- !u!95 &604700085523244945 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
   m_PrefabInstance: {fileID: 6417284427881273856}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6183354319909119825 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
+  m_PrefabInstance: {fileID: 6417284427881273856}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1748893211158611721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183354319909119825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2618549b5c414ab9c349ba3346da1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Project.EnemySkinRenderer
+  _deathPatricle: {fileID: 0}
 --- !u!4 &6810708529410686443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}

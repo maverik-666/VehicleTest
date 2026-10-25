@@ -1,6 +1,5 @@
 namespace Project
 {
-    using System.Collections.Generic;
     using NaughtyAttributes;
     using Reflex.Attributes;
     using UnityEngine;
@@ -12,10 +11,7 @@ namespace Project
         [Range(0, 1)]
         [SerializeField]
         private float _spawnRate = 0.5f;
-
-        [SerializeField]
-        private float _amplitude = 2f;
-
+        
         [SerializeField]
         private float _spread = 1f;
 
@@ -31,15 +27,18 @@ namespace Project
         
         private Player _player;
         private EnemyFactory _enemyFactory;
-        
-        private List<Enemy> _enemies = new List<Enemy>();
+
+        private EnemyRegistry _enemyRegistry;
 
         private float _lastPlayerPositionZ;
+
+        private bool _isPatrolEnabled = false;
         
         [Inject]
-        private void Construct(Player player, EnemyFactory enemyFactory)
+        private void Construct(Player player, EnemyRegistry enemyRegistry, EnemyFactory enemyFactory)
         {
             _player = player;
+            _enemyRegistry = enemyRegistry;
             _enemyFactory = enemyFactory;
         }
 
@@ -58,13 +57,12 @@ namespace Project
         private void DisposeBehind()
         {
             float playerPositionZ = _player.Position.z;
-            for (int i = _enemies.Count - 1; i >= 0; i--)
+            for (int i = _enemyRegistry.Count - 1; i >= 0; i--)
             {
-                var enemy = _enemies[i];
+                var enemy = _enemyRegistry.Items[i];
                 if (playerPositionZ - enemy.Position.z > _disposeDistance)
                 {
-                    _enemyFactory.Dispose(enemy);
-                    _enemies.RemoveAt(i);
+                    _enemyFactory.Release(enemy);
                 }
             }
         }
@@ -100,9 +98,29 @@ namespace Project
         {
             var position = new Vector3(Random.Range(-_spread, _spread), 0, positionZ);
             var enemy = _enemyFactory.Create(position);
-            _enemies.Add(enemy);
+
+            if (_isPatrolEnabled)
+            {
+                enemy.StartPatrol();
+            }
         }
-        
-        
+
+        public void EnablePatrol()
+        {
+            _isPatrolEnabled = true;
+            foreach (var enemy in _enemyRegistry.Items)
+            {
+                enemy.StartPatrol();
+            }
+        }
+
+        public void DisablePatrol()
+        {
+            _isPatrolEnabled = false;
+            foreach (var enemy in _enemyRegistry.Items)
+            {
+                enemy.DisablePatrol();
+            }
+        }
     }
 }

@@ -11,10 +11,20 @@ namespace Project
     {
         public void InstallBindings(ContainerBuilder containerBuilder)
         {
+            Random.InitState(0);
+            
+            containerBuilder.RegisterFactory(_ => new EnemyRegistry(50), Lifetime.Scoped, Resolution.Eager);
+            
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<Player>(true),
                 Lifetime.Scoped, Resolution.Eager);
 
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<EnemyFactory>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<EnemySpawner>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<GameFlowController>(true),
                 Lifetime.Scoped, Resolution.Eager);
         }
     }
