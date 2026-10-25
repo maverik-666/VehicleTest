@@ -51,6 +51,7 @@ MonoBehaviour:
     _current: 100
     _max: 100
   _attackDamage: 15
+  _size: 0.5
 --- !u!114 &5570745970038030851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,7 +99,7 @@ MonoBehaviour:
           m_Value0: 1768517022491466696
           m_Value1: 1359198594303956993
         Name: PartolRadius
-        m_Value: 3
+        m_Value: 5
     - rid: 4860037686653616360
       type: {class: 'BlackboardVariable`1[[Project.Enemy, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -627,7 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec2618549b5c414ab9c349ba3346da1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.EnemySkinRenderer
-  _deathPatricle: {fileID: 0}
+  _deathVfx: {fileID: 0}
 --- !u!4 &6810708529410686443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}

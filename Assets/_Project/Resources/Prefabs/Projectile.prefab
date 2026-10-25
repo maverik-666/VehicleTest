@@ -191,7 +191,7 @@ MonoBehaviour:
   _renderer: {fileID: 2192190686153022184}
   _trailRenderer: {fileID: 9043676336405316289}
   _hitVfx: {fileID: 0}
-  _speed: 40
+  _speed: 80
   _attackDamage: 50
   _radius: 0.1
   _autoReleaseDistance: 100

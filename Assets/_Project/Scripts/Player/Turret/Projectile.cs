@@ -19,6 +19,9 @@ namespace Project
         
         [SerializeField]
         private float _speed = 20;
+
+        [SerializeField]
+        private int _maxSpeedPerStep = 10;
         
         [SerializeField]
         private int _attackDamage = 50;
@@ -63,9 +66,28 @@ namespace Project
             {
                 return;
             }
-            
-            transform.position += transform.forward * (_speed * Time.deltaTime);
-            
+
+            float steps = _speed / _maxSpeedPerStep;
+            for (int i = 0; i < steps; i++)
+            {
+                if(_isDepleted)
+                    return;
+                
+                if (i + 1 > steps)
+                { 
+                    MoveForward(steps - Mathf.FloorToInt(steps) * _maxSpeedPerStep);
+                }
+                else
+                { 
+                    MoveForward(i + 1 * _maxSpeedPerStep);
+                }
+            }
+        }
+
+        private void MoveForward(float speed)
+        {
+            transform.position += transform.forward * (speed * Time.deltaTime);
+
             var position2d = new Vector2(transform.position.x, transform.position.z);
 
             if (Vector2.Distance(position2d, _startPosition2d) > _autoReleaseDistance)
@@ -79,7 +101,7 @@ namespace Project
                 var enemy = _enemyRegistry.Items[i];
                 var enemyPosition2d = new Vector2(enemy.Position.x, enemy.Position.z); 
                 
-                if (Vector2.Distance(position2d, enemyPosition2d) - enemy.Size - _radius < 0)
+                if (Vector2.Distance(position2d, enemyPosition2d) - enemy.Radius - _radius < 0)
                 {
                     HitEnemy(enemy);
                     return;

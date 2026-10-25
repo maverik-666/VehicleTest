@@ -838,9 +838,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f374777e15ee47769b15624010f4ffc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.EnemySpawner
-  _spawnRate: 0.5
+  _spawnRate: 0.75
   _spread: 2
-  _step: 2
+  _step: 3
   _disposeDistance: 20
   _spawnRadiusRange: {x: 10, y: 60}
 --- !u!1 &832575517
