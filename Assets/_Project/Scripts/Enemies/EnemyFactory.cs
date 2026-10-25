@@ -40,7 +40,7 @@ namespace Project
         
         private Enemy PoolCreate()
         {
-            var enemy = Instantiate(_enemyPf,  Vector3.zero, Quaternion.Euler(0, Random.Range(0, 360), 0), transform); 
+            var enemy = Instantiate(_enemyPf,  _player.Position, Quaternion.Euler(0, Random.Range(0, 360), 0), transform); 
             enemy.Init(_player, Release);
             
             enemy.gameObject.SetActive(false);

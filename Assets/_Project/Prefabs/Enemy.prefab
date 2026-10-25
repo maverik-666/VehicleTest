@@ -51,7 +51,7 @@ MonoBehaviour:
     _current: 100
     _max: 100
   _attackDamage: 15
-  _size: 0.5
+  _radius: 0.5
 --- !u!114 &5570745970038030851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,6 +70,7 @@ MonoBehaviour:
   - rid: 4860037669617140324
   - rid: 4860037669617140326
   - rid: 4860037686653616360
+  - rid: 4860037690474889556
   m_OriginalGraph: {fileID: -4712897888489313030, guid: ea0af42c8e36d594db4fb034944d8984, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -108,6 +109,14 @@ MonoBehaviour:
           m_Value1: 9828134723137429211
         Name: Enemy
         m_Value: {fileID: 3495997663914149374}
+    - rid: 4860037690474889556
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 12691073512317174563
+          m_Value1: 4230117757837082528
+        Name: PatrolSpeed
+        m_Value: 0.75
 --- !u!195 &2411975342763726920
 NavMeshAgent:
   m_ObjectHideFlags: 0

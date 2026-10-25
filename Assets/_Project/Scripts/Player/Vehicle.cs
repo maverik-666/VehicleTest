@@ -18,7 +18,13 @@ namespace Project
         private float _acceleration = 2f;
 
         [SerializeField]
-        private float _amplitude = 1.5f;
+        private float _stirringAmplitude = 1.5f;
+        
+        [SerializeField]
+        private float _rotationAmplitude = 1.5f;
+        
+        [SerializeField]
+        private float _amplitudeAcceleration = 0.1f;
         
         [SerializeField]
         private float _period = 0.5f;
@@ -27,6 +33,7 @@ namespace Project
         
         private float _movingTime = 0;
         private float _currentSpeed = 0;
+        private float _currentAmplitude = 0;
         private bool _isMoving = false;
 
         public bool IsDead => _health.IsDead;
@@ -41,6 +48,7 @@ namespace Project
         {
             _movingTime = 0;
             _currentSpeed = 0;
+            _currentAmplitude = 0;
             _isMoving = true;
         }
         
@@ -56,17 +64,21 @@ namespace Project
         private void MoveForward()
         {
             Vector3 position = transform.position;
-
-            float stirring = Mathf.Sin(_period * _movingTime) * _amplitude;
+            
+            float stirring = Mathf.Cos(_period * _movingTime) * _rotationAmplitude * _currentAmplitude;
+            float newPosX = Mathf.Sin(_period * _movingTime) * _stirringAmplitude * _currentAmplitude;
             float newPosZ = position.z + _currentSpeed * Time.deltaTime;
             
             transform.rotation = Quaternion.Euler(0, stirring, 0);
-            transform.position = new Vector3(stirring, position.y, newPosZ);
+            transform.position = new Vector3(newPosX, position.y, newPosZ);
             
             _movingTime += Time.deltaTime;
             
             _currentSpeed += _acceleration * Time.deltaTime;
             _currentSpeed = Mathf.Min(_currentSpeed, _maxSpeed);
+            
+            _currentAmplitude += _amplitudeAcceleration * Time.deltaTime;
+            _currentAmplitude = Mathf.Min(_currentAmplitude, 1);
         }
 
         public void TakeDamage(int damage)

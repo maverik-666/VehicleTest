@@ -69,10 +69,7 @@ namespace Project
 
             float steps = _speed / _maxSpeedPerStep;
             for (int i = 0; i < steps; i++)
-            {
-                if(_isDepleted)
-                    return;
-                
+            { 
                 if (i + 1 > steps)
                 { 
                     MoveForward(steps - Mathf.FloorToInt(steps) * _maxSpeedPerStep);
@@ -80,6 +77,11 @@ namespace Project
                 else
                 { 
                     MoveForward(i + 1 * _maxSpeedPerStep);
+                }
+
+                if (_isDepleted)
+                {
+                    return;
                 }
             }
         }

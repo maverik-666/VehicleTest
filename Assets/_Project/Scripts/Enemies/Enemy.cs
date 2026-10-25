@@ -46,12 +46,12 @@ namespace Project
 
         public void StartPatrol()
         { 
-            _agent.BlackboardReference.SetVariableValue("CanPatrol", true);
+            _agent.BlackboardReference.SetVariableValue("CanAggro", true);
         }
         
         public void DisablePatrol()
         { 
-            _agent.BlackboardReference.SetVariableValue("CanPatrol", false);
+            _agent.BlackboardReference.SetVariableValue("CanAggro", false);
         }
         
         public void AttackPlayer()
@@ -78,6 +78,7 @@ namespace Project
         
         public void Reset()
         {
+            _health.SetCurrentHealth(_health.Max);
             _agent.BlackboardReference.SetVariableValue("CanPatrol", false);
             _agent.Restart();
 

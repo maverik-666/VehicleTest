@@ -1,5 +1,6 @@
 namespace Project
 {
+    using DG.Tweening;
     using Reflex.Attributes;
     using UnityEngine;
 
@@ -9,6 +10,9 @@ namespace Project
     {
         [SerializeField]
         private Transform _rotatingTransform;
+        
+        [SerializeField]
+        private Transform _recoilingTransform;
 
         [SerializeField]
         private float _rotationSpeed = 30;
@@ -25,10 +29,18 @@ namespace Project
         [SerializeField]
         private float _shootInterval = 3;
 
+        [SerializeField]
+        private float _recoilDistance = 0.3f;
+
+        [SerializeField]
+        private float _recoilDuration = 0.5f;
+        
         private ProjectileFactory _projectileFactory;
 
         private bool _isShooting = false;
         private Timer _shootTimer;
+
+        private Tween _recoilTween;
 
         private float _targetRotation = 0;
         private float _currentRotation = 0;
@@ -65,7 +77,7 @@ namespace Project
                 return;
             }
             
-            _currentRotation = Mathf.Lerp(_currentRotation, _targetRotation, Time.deltaTime * _rotationSpeed);
+            _currentRotation = Mathf.LerpAngle(_currentRotation, _targetRotation, Time.deltaTime * _rotationSpeed);
             _currentRotation = Mathf.Clamp(_currentRotation, -_maxRotationAngle, _maxRotationAngle);
             _rotatingTransform.rotation = Quaternion.Euler(0, _currentRotation, 0);
             
@@ -84,6 +96,12 @@ namespace Project
             projectile.gameObject.SetActive(true);
             
             _shootTimer.Start(_shootInterval);
+            
+            _recoilTween?.Kill(true);
+            _recoilTween = _recoilingTransform.DOLocalMove(-transform.forward * _recoilDistance, 0.3f)
+                .SetEase(Ease.OutCubic)
+                .SetRelative()
+                .SetLoops(2, LoopType.Yoyo);
         }
     }
 }
