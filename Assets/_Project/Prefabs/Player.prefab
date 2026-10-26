@@ -235,7 +235,7 @@ MonoBehaviour:
     _max: 100
   _healthBar: {fileID: 727503744302694816}
   _maxSpeed: 5
-  _acceleration: 1
+  _acceleration: 3
   _stirringAmplitude: 1.5
   _rotationAmplitude: 5
   _amplitudeAcceleration: 0.1
@@ -465,6 +465,11 @@ PrefabInstance:
 --- !u!4 &5468926384432783235 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6468337174830051401, guid: d65caa3fec35e614eb084c097f9737a1, type: 3}
+  m_PrefabInstance: {fileID: 1306503427262672842}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &6569308311550463668 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 5263440139143537022, guid: d65caa3fec35e614eb084c097f9737a1, type: 3}
   m_PrefabInstance: {fileID: 1306503427262672842}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2308037553728603884
@@ -767,6 +772,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6468337174830051401, guid: d65caa3fec35e614eb084c097f9737a1, type: 3}
   m_PrefabInstance: {fileID: 8257366147426555725}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &4292898193686722099 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 5263440139143537022, guid: d65caa3fec35e614eb084c097f9737a1, type: 3}
+  m_PrefabInstance: {fileID: 8257366147426555725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8269395829974087051
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -928,10 +938,13 @@ MonoBehaviour:
   - {fileID: 1847450076016773024}
   - {fileID: 2600141967819237386}
   - {fileID: 6568411776133001004}
+  _trails:
+  - {fileID: 6569308311550463668}
+  - {fileID: 4292898193686722099}
   _rotationSpeed: 360
   _wobbleStrength: 0.15
   _wobbleDuration: 0.15
-  _wobbleVibrato: 0.2
+  _wobbleVibrato: 0
 --- !u!65 &5711450013802805633
 BoxCollider:
   m_ObjectHideFlags: 0

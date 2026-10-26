@@ -30,6 +30,24 @@ namespace Project
             
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<EnemySpawner>(true),
                 Lifetime.Scoped, Resolution.Eager);
+
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<Cover>(true),
+                Lifetime.Scoped, Resolution.Eager);
+
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<IntroScreen>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<LoseScreen>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<WinScreen>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<ProgressBar>(true),
+                Lifetime.Scoped, Resolution.Eager);
+            
+            containerBuilder.RegisterFactory(_ => GetComponentInChildren<WinConditionObserver>(true),
+                Lifetime.Scoped, Resolution.Eager);
             
             containerBuilder.RegisterFactory(_ => GetComponentInChildren<GameFlowController>(true),
                 Lifetime.Scoped, Resolution.Eager);

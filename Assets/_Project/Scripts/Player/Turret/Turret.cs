@@ -108,5 +108,12 @@ namespace Project
                 .SetRelative()
                 .SetLoops(2, LoopType.Yoyo);
         }
+
+        public void Reset()
+        {
+            _isShooting = false;
+            _rotatingTransform.rotation = Quaternion.identity;
+            _turretRay.HideInstant();
+        }
     }
 }

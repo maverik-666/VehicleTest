@@ -33,6 +33,7 @@ namespace Project
         private float _lastPlayerPositionZ;
 
         private bool _isPatrolEnabled = false;
+        private bool _isSpawningEnabled = false;
         
         [Inject]
         private void Construct(Player player, EnemyRegistry enemyRegistry, EnemyFactory enemyFactory)
@@ -41,15 +42,14 @@ namespace Project
             _enemyRegistry = enemyRegistry;
             _enemyFactory = enemyFactory;
         }
-
-        private void Start()
-        {
-            float playerPositionZ = _player.Position.z;
-            TrySpawnOnRange(playerPositionZ + _spawnRadiusRange.x, playerPositionZ + _spawnRadiusRange.y);
-        }
-
+        
         private void Update()
         {
+            if (!_isSpawningEnabled)
+            {
+                return;
+            }
+            
             DisposeBehind();
             TrySpawnAhead();
         }
@@ -62,7 +62,7 @@ namespace Project
                 var enemy = _enemyRegistry.Items[i];
                 if (playerPositionZ - enemy.Position.z > _disposeDistance)
                 {
-                    _enemyFactory.Release(enemy);
+                    enemy.DieSilent();
                 }
             }
         }
@@ -114,6 +114,17 @@ namespace Project
             }
         }
 
+        public void EnableSpawn()
+        {
+            _lastPlayerPositionZ = _player.Position.z;
+            _isSpawningEnabled = true;
+        }
+
+        public void DisableSpawn()
+        {
+            _isSpawningEnabled = false;
+        }
+
         public void DisablePatrol()
         {
             _isPatrolEnabled = false;
@@ -121,6 +132,17 @@ namespace Project
             {
                 enemy.DisablePatrol();
             }
+        }
+
+        public void Reset()
+        {
+            for (int i = _enemyRegistry.Items.Count - 1; i >= 0; i--)
+            {
+                var enemy = _enemyRegistry.Items[i];
+                enemy.DieSilent();
+            }
+
+            _isPatrolEnabled = false;
         }
     }
 }

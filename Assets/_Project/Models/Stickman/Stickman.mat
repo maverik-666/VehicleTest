@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StickmanMaterial
+  m_Name: Stickman
   m_Shader: {fileID: -6465566751694194690, guid: 1561569e34a640b4c9440ea631f5f966, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

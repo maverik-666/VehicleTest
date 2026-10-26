@@ -25,6 +25,9 @@ namespace Project
         
         [SerializeField]
         private Transform[] _wheels;
+
+        [SerializeField]
+        private TrailRenderer[] _trails;
         
         [SerializeField]
         private float _rotationSpeed = 30;
@@ -36,7 +39,7 @@ namespace Project
         private float _wobbleDuration = 0.15f;
      
         [SerializeField]
-        private float _wobbleVibrato = 0.15f;
+        private int _wobbleVibrato = 10;
         
         private Dictionary<Renderer, MaterialFlasher> _materialFlashers;
 
@@ -59,6 +62,14 @@ namespace Project
             }
         }
 
+        public void StartMoving()
+        {
+            foreach (var trail in _trails)
+            {
+                trail.emitting = true;
+            }
+        }
+        
         [NaughtyAttributes.Button]
         public void AnimateTakeDamage()
         {
@@ -68,7 +79,7 @@ namespace Project
             }
             
             _shakeTween?.Kill(true); 
-            _shakeTween = transform.DOPunchScale(Vector3.one * _wobbleDuration, _wobbleVibrato, elasticity: 0.5f)
+            _shakeTween = transform.DOPunchScale(Vector3.one * _wobbleStrength, _wobbleDuration, _wobbleVibrato, elasticity: 0.5f)
                 .SetLink(transform.gameObject, LinkBehaviour.KillOnDestroy);
         }
 
@@ -84,6 +95,11 @@ namespace Project
 
         public void Reset()
         {
+            foreach (var trail in _trails)
+            {
+                trail.emitting = false;
+            }
+            
             foreach (var renderer in _renderers)
             {
                 _materialFlashers[renderer].Clear();

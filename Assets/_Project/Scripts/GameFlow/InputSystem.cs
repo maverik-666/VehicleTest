@@ -1,5 +1,6 @@
 namespace Project
 {
+    using System;
     using Reflex.Attributes;
     using UnityEngine;
     using UnityEngine.InputSystem;
@@ -21,6 +22,8 @@ namespace Project
 
         public bool IsPressed => _tapAction.IsPressed();
 
+        public event Action Click;
+
         [Inject]
         private void Construct()
         { 
@@ -30,10 +33,15 @@ namespace Project
             _pointerAction.Enable();
             _tapAction.Enable();
         }
-
+        
         private void Update()
         {
             _pointerScreenPosition = _pointerAction.ReadValue<Vector2>();
+
+            if (_tapAction.WasPressedThisFrame())
+            {
+                Click?.Invoke();
+            }
         }
 
         private void OnDestroy()

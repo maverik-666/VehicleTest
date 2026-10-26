@@ -18,7 +18,7 @@ namespace Project
         private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _spriteRenderer.SetAlpha(0);
+            HideInstant();
         }
 
         public void Show()
@@ -33,6 +33,11 @@ namespace Project
             _tween?.Kill();
             _tween = _spriteRenderer.DOFade(0, 0.5f)
                 .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
+        }
+
+        public void HideInstant()
+        {
+            _spriteRenderer.SetAlpha(0);
         }
     }
 }

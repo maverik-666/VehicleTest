@@ -109,6 +109,14 @@ namespace Project
 
             Dispose();
         }
+
+        public void DieSilent()
+        {
+            _agent.End();
+            _agent.enabled = false;
+            
+            Dispose();
+        }
         
         private void Dispose()
         {

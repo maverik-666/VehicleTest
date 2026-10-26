@@ -2,10 +2,8 @@ namespace Project
 {
     using DG.Tweening;
     using Reflex.Attributes;
-    using Unity.Mathematics.Geometry;
     using UnityEngine;
     using UnityEngine.UI;
-    using Canvas = Unity.AppUI.UI.Canvas;
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Transform))]

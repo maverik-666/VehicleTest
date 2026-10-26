@@ -65,6 +65,8 @@ namespace Project
             _health.SetCurrentHealth(_health.Max);
             _healthBar.UpdateHealthInstant();
             
+            _skinRenderer.StartMoving();
+            
             _isMoving = true;
         }
         
@@ -100,8 +102,12 @@ namespace Project
         public void TakeDamage(int damage)
         {
             _health.TakeDamage(damage);
-            _healthBar.Show();
-            _healthBar.UpdateHealth();
+
+            if (!_health.IsDead)
+            {
+                _healthBar.Show(); 
+                _healthBar.UpdateHealth();
+            }
             
             _skinRenderer.AnimateTakeDamage();
         }
@@ -113,6 +119,18 @@ namespace Project
             _healthBar.Hide();
             
             _skinRenderer.AnimateDeath();
+        }
+
+        public void Reset()
+        {
+            _isMoving = false;
+            _healthBar.HideInstant();
+            
+            _skinRenderer.Reset();
+            
+            transform.rotation = Quaternion.identity;
+            transform.position = Vector3.zero;
+            
         }
     }
 }
