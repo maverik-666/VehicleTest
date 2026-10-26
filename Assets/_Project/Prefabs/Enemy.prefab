@@ -145,7 +145,7 @@ MonoBehaviour:
           m_Value0: 2658143626288443527
           m_Value1: 6769336428712311229
         Name: Vision
-        m_Value: 15
+        m_Value: 20
 --- !u!195 &2411975342763726920
 NavMeshAgent:
   m_ObjectHideFlags: 0

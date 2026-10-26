@@ -146,6 +146,8 @@ namespace Project
             _loseScreen.HideInstant();
             _winScreen.HideInstant();
             
+            _winConditionObserver.Reset();
+            
             _introScreen.ShowInstant();
             _gameState = GameState.Intro;
         }

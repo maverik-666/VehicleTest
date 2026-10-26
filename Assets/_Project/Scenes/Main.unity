@@ -879,7 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.EnemySpawner
   _spawnRate: 0.75
-  _spread: 2
+  _spread: 4
   _step: 3
   _disposeDistance: 20
   _spawnRadiusRange: {x: 10, y: 30}
@@ -1457,7 +1457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.WinConditionObserver
   _destination: {fileID: 950270757}
-  _closeWinStamp: 0.7
+  _closeWinStamp: 0.8
 --- !u!1 &1936576762
 GameObject:
   m_ObjectHideFlags: 0
