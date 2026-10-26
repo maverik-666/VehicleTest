@@ -9,7 +9,13 @@ namespace Project
     public class Vehicle : MonoBehaviour
     {
         [SerializeField]
+        private Collider _collider;
+        
+        [SerializeField]
         private Health _health = new Health(100);
+
+        [SerializeField]
+        private HealthBar _healthBar;
         
         [SerializeField]
         private float _maxSpeed = 10f;
@@ -38,10 +44,16 @@ namespace Project
 
         public bool IsDead => _health.IsDead;
 
+        public Bounds Bounds => _collider.bounds;
+        
         [Inject]
         private void Construct()
         {
             _skinRenderer = GetComponentInChildren<VehicleSkinRenderer>(true);
+            _skinRenderer.Init();
+            
+            _healthBar.Init(_health);
+            _healthBar.HideInstant();
         }
         
         public void StartMoving()
@@ -49,6 +61,10 @@ namespace Project
             _movingTime = 0;
             _currentSpeed = 0;
             _currentAmplitude = 0;
+            
+            _health.SetCurrentHealth(_health.Max);
+            _healthBar.UpdateHealthInstant();
+            
             _isMoving = true;
         }
         
@@ -84,12 +100,18 @@ namespace Project
         public void TakeDamage(int damage)
         {
             _health.TakeDamage(damage);
+            _healthBar.Show();
+            _healthBar.UpdateHealth();
+            
             _skinRenderer.AnimateTakeDamage();
         }
 
         public void Die()
         {
             _isMoving = false;
+            
+            _healthBar.Hide();
+            
             _skinRenderer.AnimateDeath();
         }
     }

@@ -1,11 +1,13 @@
 namespace Project
 {
     using System;
+    using NaughtyAttributes;
     using UnityEngine;
 
     [Serializable]
     public class Health
     {
+        [ReadOnly]
         [SerializeField]
         private int _current = 0;
 

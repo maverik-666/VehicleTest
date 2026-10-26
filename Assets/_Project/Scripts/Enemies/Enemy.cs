@@ -2,6 +2,7 @@ namespace Project
 {
     using System;
     using DG.Tweening;
+    using Reflex.Attributes;
     using Unity.Behavior;
     using UnityEngine;
 
@@ -17,6 +18,9 @@ namespace Project
 
         [SerializeField]
         private float _radius = 0.5f;
+
+        [SerializeField]
+        private HealthBar _healthBar;
         
         private Action<Enemy> _returnToPool;
         
@@ -32,6 +36,9 @@ namespace Project
         
         public void Init(Player player, Action<Enemy> returnToPool)
         {
+            _healthBar.Init(_health);
+            _healthBar.HideInstant();
+            
             _player = player;
             _returnToPool = returnToPool;
             
@@ -68,6 +75,10 @@ namespace Project
         public void TakeDamage(int damage)
         {
             _health.TakeDamage(damage);
+            
+            _healthBar.Show();
+            _healthBar.UpdateHealth();
+            
             _skinRenderer.AnimateTakeDamage();
 
             if (_health.IsDead)
@@ -79,16 +90,22 @@ namespace Project
         public void Reset()
         {
             _health.SetCurrentHealth(_health.Max);
+            _healthBar.HideInstant();
+            _healthBar.UpdateHealthInstant();
+            
             _agent.BlackboardReference.SetVariableValue("CanPatrol", false);
             _agent.Restart();
-
+            _agent.enabled = true;
+            
             _skinRenderer.Reset();
         }
 
         public void Die()
         {
             _skinRenderer.AnimateDeath();
+            _healthBar.Hide();
             _agent.End();
+            _agent.enabled = false;
 
             Dispose();
         }

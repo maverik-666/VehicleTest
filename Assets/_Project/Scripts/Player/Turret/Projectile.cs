@@ -9,10 +9,7 @@ namespace Project
     public class Projectile : MonoBehaviour
     {
         [SerializeField]
-        private Renderer _renderer;
-
-        [SerializeField]
-        private TrailRenderer _trailRenderer;
+        private ParticleSystem _vfx;
 
         [SerializeField]
         private ParticleSystem _hitVfx;
@@ -42,10 +39,6 @@ namespace Project
         {
             _enemyRegistry = enemyRegistry;
             _returnToPool = returnToPool;
-            
-            
-            _trailRenderer.emitting = false;
-            
         }
 
         public void Launch(Vector3 position, Vector3 direction)
@@ -54,9 +47,7 @@ namespace Project
             
             transform.position = position;
             transform.forward = direction;
-            
-            _trailRenderer.emitting = true;
-            _renderer.enabled = true;
+            _vfx.gameObject.SetActive(true);
             _isDepleted = false;
         }
         
@@ -114,15 +105,14 @@ namespace Project
         private void HitEnemy(Enemy enemy)
         {
             enemy.TakeDamage(_attackDamage);
-            //_hitVfx.Play();
+            _hitVfx.Play();
             
             Release();
         }
 
         private void Release()
         {
-            _trailRenderer.emitting = false;
-            _renderer.enabled = false;
+            _vfx.gameObject.SetActive(false);
 
             _isDepleted = true;
 

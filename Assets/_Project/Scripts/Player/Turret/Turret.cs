@@ -25,6 +25,9 @@ namespace Project
         
         [SerializeField]
         private Transform _projectileSpawnPoint;
+
+        [SerializeField]
+        private ParticleSystem _shootVfx;
         
         [SerializeField]
         private float _shootInterval = 3;
@@ -95,10 +98,12 @@ namespace Project
             projectile.Launch(_projectileSpawnPoint.position, _projectileSpawnPoint.forward);
             projectile.gameObject.SetActive(true);
             
+            _shootVfx.Play();
+            
             _shootTimer.Start(_shootInterval);
             
             _recoilTween?.Kill(true);
-            _recoilTween = _recoilingTransform.DOLocalMove(-transform.forward * _recoilDistance, 0.3f)
+            _recoilTween = _recoilingTransform.DOLocalMove(-transform.forward * _recoilDistance, _recoilDuration/2f)
                 .SetEase(Ease.OutCubic)
                 .SetRelative()
                 .SetLoops(2, LoopType.Yoyo);

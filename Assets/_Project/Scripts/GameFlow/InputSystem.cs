@@ -1,5 +1,6 @@
 namespace Project
 {
+    using Reflex.Attributes;
     using UnityEngine;
     using UnityEngine.InputSystem;
 
@@ -20,7 +21,8 @@ namespace Project
 
         public bool IsPressed => _tapAction.IsPressed();
 
-        private void Awake()
+        [Inject]
+        private void Construct()
         { 
             _pointerAction = _pointerActionReference.action;
             _tapAction = _tapActionReference.action;

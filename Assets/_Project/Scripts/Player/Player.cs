@@ -8,6 +8,8 @@ namespace Project
     public class Player : MonoBehaviour
     {
         public Vector3 Position => transform.position;
+        
+        public Bounds Bounds => _vehicle.Bounds;
 
         private GameFlowController _gameFlowController;
         private Vehicle _vehicle;
@@ -31,9 +33,11 @@ namespace Project
 
         public void TakeDamage(int damage)
         {
+            bool isAlreadyDead = _vehicle.IsDead;
+            
             _vehicle.TakeDamage(damage);
-
-            if (_vehicle.IsDead)
+            
+            if (_vehicle.IsDead && !isAlreadyDead)
             {
                 Die();
             }

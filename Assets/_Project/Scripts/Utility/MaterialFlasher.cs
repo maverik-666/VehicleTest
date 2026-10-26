@@ -19,6 +19,15 @@ namespace Project
             _renderer = renderer;
             _propBlock = new MaterialPropertyBlock();
         }
+        
+        public void SetColor(Color color)
+        {
+            _flashTween?.Kill();
+            
+            _renderer.GetPropertyBlock(_propBlock);
+            _propBlock.SetColor(_ColorId, color);
+            _renderer.SetPropertyBlock(_propBlock);
+        }
 
         public void FlashColor(Color color, float duration)
         {
@@ -30,10 +39,10 @@ namespace Project
             _flashTween = DOTween.Sequence()
                 .SetLink(_gameObject, LinkBehaviour.KillOnDestroy)
                 .AppendInterval(duration)
-                .AppendCallback(Revert);
+                .AppendCallback(Clear);
         }
-
-        private void Revert()
+        
+        public void Clear()
         {
             _renderer.GetPropertyBlock(_propBlock);
             _propBlock.SetColor(_ColorId, Color.clear);

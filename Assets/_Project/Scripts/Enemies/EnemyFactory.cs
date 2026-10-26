@@ -1,7 +1,10 @@
 namespace Project
 {
     using System;
+    using DG.Tweening;
     using Reflex.Attributes;
+    using Reflex.Core;
+    using Reflex.Injectors;
     using UnityEngine;
     using UnityEngine.Pool;
     using Random = UnityEngine.Random;
@@ -19,13 +22,17 @@ namespace Project
         [SerializeField]
         private int _maxSize = 200;
 
+        private Container _container;
+        
         private Player _player;
         private ObjectPool<Enemy> _pool;
         private EnemyRegistry _enemyRegistry;
 
         [Inject]
-        private void Construct(EnemyRegistry enemyRegistry, Player player)
+        private void Construct(Container container, EnemyRegistry enemyRegistry, Player player)
         {
+            _container = container;
+            
             _enemyRegistry = enemyRegistry;
             _player = player;
             _pool = new ObjectPool<Enemy>(
@@ -41,6 +48,7 @@ namespace Project
         private Enemy PoolCreate()
         {
             var enemy = Instantiate(_enemyPf,  _player.Position, Quaternion.Euler(0, Random.Range(0, 360), 0), transform); 
+            GameObjectInjector.InjectRecursive(enemy.gameObject, _container);
             enemy.Init(_player, Release);
             
             enemy.gameObject.SetActive(false);
@@ -76,8 +84,18 @@ namespace Project
 
         public void Release(Enemy enemy)
         {
+            var enemyToRelease = enemy;
             _enemyRegistry.Remove(enemy);
-            _pool.Release(enemy);
+
+            DOTween.Sequence()
+                .SetLink(gameObject, LinkBehaviour.KillOnDestroy)
+                .AppendInterval(2)
+                .AppendCallback(ReturnToPool);
+
+            void ReturnToPool()
+            { 
+                _pool.Release(enemyToRelease);
+            }
         }
 
         private void OnDestroy()
