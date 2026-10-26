@@ -268,7 +268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Stage Clear!
+  m_text: You win
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f7900e8e9a582742bce3c8edda8f92e, type: 2}
   m_sharedMaterial: {fileID: 5203621987606332864, guid: 8f7900e8e9a582742bce3c8edda8f92e, type: 2}

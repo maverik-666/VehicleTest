@@ -34,6 +34,7 @@ namespace Project
 
         public void Deactivate()
         {
+            _vehicle.StopMoving();
             _turret.StopShooting();
         }
 

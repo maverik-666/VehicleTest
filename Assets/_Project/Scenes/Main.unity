@@ -880,7 +880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.EnemySpawner
   _spawnRate: 0.75
   _spread: 4
-  _step: 3
+  _step: 2.75
   _disposeDistance: 20
   _spawnRadiusRange: {x: 10, y: 30}
 --- !u!1 &832575517
