@@ -8,20 +8,19 @@ namespace Project
     [RequireComponent(typeof(Vehicle))]
     public class Player : MonoBehaviour
     {
+        private Vehicle _vehicle;
+        private Turret _turret;
+        
+        private bool _isAiming;
+
+        public event Action Died;
+        
         public Vector3 Position => transform.position;
         
         public Bounds Bounds => _vehicle.Bounds;
         
-        private Vehicle _vehicle;
-        private Turret _turret;
-        
-        private Action _deathCallback;
-        private bool _isAiming;
-
-        public void Init(Action deathCallback)
+        private void Awake()
         {
-            _deathCallback = deathCallback;
-            
             _vehicle = GetComponent<Vehicle>();
             _turret = GetComponentInChildren<Turret>(true);
         }
@@ -57,7 +56,7 @@ namespace Project
         {
             _vehicle.Die();
             _turret.StopShooting();
-            _deathCallback.Invoke();
+            Died.Invoke();
         }
 
         public void SetAim(Vector3 direction)
@@ -65,10 +64,10 @@ namespace Project
             _turret.SetAim(direction);
         }
         
-        public void Reset()
+        public void ResetState()
         {
-            _vehicle.Reset();
-            _turret.Reset();
+            _vehicle.ResetState();
+            _turret.ResetState();
         }
     }
 }

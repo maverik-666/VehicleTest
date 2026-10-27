@@ -2,8 +2,13 @@ namespace Project
 {
     using UnityEngine;
 
-    public static class Vector2Extensions
+    public static class VectorExtensions
     {
+        public static Vector2 ToXZ(this Vector3 v)
+        {
+            return new Vector2(v.x, v.z);
+        }
+        
         public static Vector2 Rotate(this Vector2 v, float degrees) 
         {
             float sin = Mathf.Sin(degrees * Mathf.Deg2Rad);

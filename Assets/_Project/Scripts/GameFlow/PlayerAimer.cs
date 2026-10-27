@@ -8,25 +8,25 @@ namespace Project
     public class PlayerAimer : MonoBehaviour
     {
         private Player _player;
-        private InputSystem _inputSystem;
+        private InputHandler _inputHandler;
         private Camera _camera;
         
         [Inject]
-        private void Construct(Player player, InputSystem inputSystem, Camera camera)
+        private void Construct(Player player, InputHandler inputHandler, Camera camera)
         {
             _player = player;
-            _inputSystem = inputSystem;
+            _inputHandler = inputHandler;
             _camera = camera;
         }
 
         private void Update()
         {
-            if (!_inputSystem.IsPressed)
+            if (!_inputHandler.IsPressed)
             {
                 return;
             }
             
-            var ray = _camera.ScreenPointToRay(_inputSystem.PointerScreenPosition);
+            var ray = _camera.ScreenPointToRay(_inputHandler.PointerScreenPosition);
 
             float t = (-ray.origin.y) / ray.direction.y;
             var aimPoint = ray.origin + ray.direction * t;

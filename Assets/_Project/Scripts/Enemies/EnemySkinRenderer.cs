@@ -76,7 +76,7 @@ namespace Project
             _animator.enabled = false;
         }
 
-        public void Reset()
+        public void ResetState()
         { 
             _renderer.enabled = true;
             _animator.enabled = true;

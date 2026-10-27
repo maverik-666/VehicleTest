@@ -3,7 +3,6 @@ namespace Project
     using System;
     using Reflex.Attributes;
     using UnityEngine;
-    using UnityEngine.UIElements;
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Transform))]
@@ -19,8 +18,8 @@ namespace Project
         private ProgressBar _progressBar;
         private Player _player;
 
-        private Action _winCallback;
-        private Action _closeWinCallback;
+        public event Action WinCallback;
+        public event Action CloseWinCallback;
 
         private bool _isCloseWinReached = false;
         private bool _isObserving;
@@ -32,10 +31,8 @@ namespace Project
             _player = player;
         }
 
-        public void Init(Action closeWinCallback, Action winCallback)
+        private void Awake()
         {
-            _winCallback = winCallback;
-            _closeWinCallback = closeWinCallback;
             _progressBar.HideInstant();
         }
 
@@ -52,7 +49,7 @@ namespace Project
             _progressBar.Hide();
         }
 
-        public void Reset()
+        public void ResetState()
         {
             _isCloseWinReached = false;
             _progressBar.HideInstant();
@@ -83,12 +80,12 @@ namespace Project
         private void CloseToWin()
         {
             _isCloseWinReached = true;
-            _closeWinCallback?.Invoke();
+            CloseWinCallback?.Invoke();
         }
         
         private void Win()
         {
-            _winCallback.Invoke();
+            WinCallback.Invoke();
         }
     }
 }

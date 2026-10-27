@@ -1,59 +1,66 @@
 namespace Project
 {
-    using Reflex.Attributes;
-    using UnityEngine;
+    using System;
 
-    [DisallowMultipleComponent]
-    [RequireComponent(typeof(Transform))]
-    public class GameFlowController : MonoBehaviour
+    public class GameFlow : IDisposable
     {
         private GameState _gameState;
 
-        [Inject]
-        private Cover _cover;
+        private readonly Cover _cover;
         
-        [Inject]
-        private IntroScreen _introScreen;
+        private readonly IntroScreen _introScreen;
         
-        [Inject]
-        private LoseScreen _loseScreen;
+        private readonly LoseScreen _loseScreen;
 
-        [Inject]
-        private WinScreen _winScreen;
+        private readonly WinScreen _winScreen;
 
-        private WinConditionObserver _winConditionObserver;
+        private readonly WinConditionObserver _winConditionObserver;
         
-        private InputSystem _inputSystem;
+        private readonly InputHandler _inputHandler;
         
-        private EnemySpawner _enemySpawner;
-        private Player _player;
+        private readonly EnemySpawner _enemySpawner;
+        private readonly Player _player;
         
-        [Inject]
-        private void Construct( 
+        public GameFlow( 
+            Cover cover,
+            IntroScreen introScreen,
+            LoseScreen loseScreen,
+            WinScreen winScreen,
+            InputHandler inputHandler,
             WinConditionObserver winConditionObserver,
-            InputSystem inputSystem,
-            EnemySpawner enemySpawner,
-            Player player)
+            Player player, 
+            EnemySpawner enemySpawner)
         {
             _gameState = GameState.Intro;
+
+            _cover = cover;
+            _introScreen = introScreen;
+            _loseScreen = loseScreen;
+            _winScreen = winScreen;
+
+            _inputHandler = inputHandler;
+            _inputHandler.Click += OnClick;
             
             _winConditionObserver = winConditionObserver;
-            _winConditionObserver.Init(PlayerCloseToDestination, PlayerReachedDestination);
+            _winConditionObserver.CloseWinCallback += OnPlayerCloseToDestination;  
+            _winConditionObserver.WinCallback += OnPlayerReachedDestination;
 
             _player = player;
-            _player.Init(PlayerDied);
-            
-            _inputSystem = inputSystem;
-            _enemySpawner = enemySpawner;
+            _player.Died += OnPlayerDied;
 
-            _inputSystem.Click += OnClick;
+            _enemySpawner = enemySpawner;
         }
         
-        private void OnDisable()
+        public void Dispose()
         {
-            _inputSystem.Click -= OnClick;
-        }
+            _inputHandler.Click -= OnClick;
+            
+            _winConditionObserver.CloseWinCallback -= OnPlayerCloseToDestination;  
+            _winConditionObserver.WinCallback -= OnPlayerReachedDestination;
 
+            _player.Died -= OnPlayerDied;
+        }
+        
         private void OnClick()
         {
             switch (_gameState)
@@ -93,7 +100,7 @@ namespace Project
             _winConditionObserver.StartObserving();
         }
         
-        private void PlayerDied()
+        private void OnPlayerDied()
         {
             if(_gameState == GameState.Gameplay)
                 Lose();
@@ -108,12 +115,12 @@ namespace Project
             _loseScreen.Show();
         }
 
-        private void PlayerCloseToDestination()
+        private void OnPlayerCloseToDestination()
         {
             _enemySpawner.DisableSpawn();
         }
 
-        private void PlayerReachedDestination()
+        private void OnPlayerReachedDestination()
         {
             if(_gameState == GameState.Gameplay)
                 Win();
@@ -139,14 +146,14 @@ namespace Project
         
         private void ResetGame()
         {
-            _player.Reset();
-            _enemySpawner.Reset();
+            _player.ResetState();
+            _enemySpawner.ResetState();
             _enemySpawner.EnableSpawn();
             
             _loseScreen.HideInstant();
             _winScreen.HideInstant();
             
-            _winConditionObserver.Reset();
+            _winConditionObserver.ResetState();
             
             _introScreen.ShowInstant();
             _gameState = GameState.Intro;

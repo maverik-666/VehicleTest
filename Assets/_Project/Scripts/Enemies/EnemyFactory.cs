@@ -15,13 +15,7 @@ namespace Project
     {
         [SerializeField]
         private Enemy _enemyPf;
-
-        [SerializeField]
-        private int _defaultCapacity = 50;
         
-        [SerializeField]
-        private int _maxSize = 200;
-
         private Container _container;
         
         private Player _player;
@@ -29,7 +23,7 @@ namespace Project
         private EnemyRegistry _enemyRegistry;
 
         [Inject]
-        private void Construct(Container container, EnemyRegistry enemyRegistry, Player player)
+        private void Construct(Container container, EnemyConfig enemyConfig, EnemyRegistry enemyRegistry, Player player)
         {
             _container = container;
             
@@ -41,15 +35,15 @@ namespace Project
                 PoolRelease,
                 PoolDestroy,
                 true,
-                _defaultCapacity,
-                _maxSize);
+                enemyConfig.PoolCapacity,
+                enemyConfig.PoolMaxSize);
         }
         
         private Enemy PoolCreate()
         {
             var enemy = Instantiate(_enemyPf,  _player.Position, Quaternion.Euler(0, Random.Range(0, 360), 0), transform); 
             GameObjectInjector.InjectRecursive(enemy.gameObject, _container);
-            enemy.Init(_player, Release);
+            enemy.ReturnToPool += Release;
             
             enemy.gameObject.SetActive(false);
             
@@ -58,7 +52,7 @@ namespace Project
         
         private void PoolGet(Enemy enemy)
         {
-            enemy.Reset();
+            enemy.ResetState();
         }
 
         private void PoolRelease(Enemy enemy)
@@ -68,6 +62,7 @@ namespace Project
 
         private void PoolDestroy(Enemy enemy)
         {
+            enemy.ReturnToPool -= Release;
             Destroy(enemy.gameObject);
         }
         

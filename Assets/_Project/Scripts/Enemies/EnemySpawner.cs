@@ -134,7 +134,7 @@ namespace Project
             }
         }
 
-        public void Reset()
+        public void ResetState()
         {
             for (int i = _enemyRegistry.Items.Count - 1; i >= 0; i--)
             {

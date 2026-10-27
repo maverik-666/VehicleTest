@@ -5,7 +5,7 @@ namespace Project
     using UnityEngine;
     using UnityEngine.InputSystem;
 
-    public class InputSystem : MonoBehaviour
+    public class InputHandler : MonoBehaviour
     {
         [SerializeField]
         private InputActionReference _pointerActionReference;
@@ -24,8 +24,7 @@ namespace Project
 
         public event Action Click;
 
-        [Inject]
-        private void Construct()
+        private void Awake()
         { 
             _pointerAction = _pointerActionReference.action;
             _tapAction = _tapActionReference.action;

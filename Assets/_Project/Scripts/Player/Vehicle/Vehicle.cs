@@ -1,6 +1,5 @@
 namespace Project
 {
-    using NaughtyAttributes;
     using Reflex.Attributes;
     using UnityEngine;
 
@@ -46,8 +45,7 @@ namespace Project
 
         public Bounds Bounds => _collider.bounds;
         
-        [Inject]
-        private void Construct()
+        private void Awake()
         {
             _skinRenderer = GetComponentInChildren<VehicleSkinRenderer>(true);
             _skinRenderer.Init();
@@ -126,12 +124,12 @@ namespace Project
             _skinRenderer.AnimateDeath();
         }
 
-        public void Reset()
+        public void ResetState()
         {
             _isMoving = false;
             _healthBar.HideInstant();
             
-            _skinRenderer.Reset();
+            _skinRenderer.ResetState();
             
             transform.rotation = Quaternion.identity;
             transform.position = Vector3.zero;

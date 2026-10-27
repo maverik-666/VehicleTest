@@ -93,7 +93,7 @@ namespace Project
             _deathVfx.Play();
         }
 
-        public void Reset()
+        public void ResetState()
         {
             foreach (var trail in _trails)
             {

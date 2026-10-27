@@ -9,51 +9,77 @@ namespace Project
     [RequireComponent(typeof(Transform))]
     public class LevelInstaller : MonoBehaviour, IInstaller
     {
+        [Header("Utils")]
+        [SerializeField]
+        private Camera _camera;
+        
+        [SerializeField]
+        private InputHandler _inputHandler;
+        
+        [Header("UI")]
+        [SerializeField]
+        private Cover _cover;
+        
+        [SerializeField]
+        private IntroScreen _introScreen;
+
+        [SerializeField]
+        private LoseScreen _loseScreen;
+        
+        [SerializeField]
+        private WinScreen _winScreen;
+        
+        [SerializeField]
+        private ProgressBar _progressBar;
+        
+        [Header("Gameplay")]
+        [SerializeField]
+        private Player _player;
+        
+        [SerializeField]
+        private WinConditionObserver _winConditionObserver;
+
+        [Header("Enemy")]
+        [SerializeField]
+        private EnemyConfig _enemyConfig;
+        
+        [SerializeField]
+        private EnemyFactory _enemyFactory;
+
+        [SerializeField]
+        private EnemySpawner _enemySpawner;
+
+        [Header("Projectile")]
+        [SerializeField]
+        private ProjectileConfig _projectileConfig;
+        
+        [SerializeField]
+        private ProjectileFactory _projectileFactory;
+        
         public void InstallBindings(ContainerBuilder containerBuilder)
         {
-            Random.InitState(0);
+            containerBuilder.RegisterValue(_camera);
+            containerBuilder.RegisterValue(_inputHandler);
             
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<Camera>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<InputSystem>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<Player>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => new EnemyRegistry(50), 
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<EnemyFactory>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<EnemySpawner>(true),
-                Lifetime.Scoped, Resolution.Eager);
+            containerBuilder.RegisterValue(_cover);
+            containerBuilder.RegisterValue(_introScreen);
+            containerBuilder.RegisterValue(_loseScreen);
+            containerBuilder.RegisterValue(_winScreen);
 
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<Cover>(true),
-                Lifetime.Scoped, Resolution.Eager);
+            containerBuilder.RegisterValue(_progressBar);
+            
+            containerBuilder.RegisterValue(_player);
+            containerBuilder.RegisterValue(_winConditionObserver);
 
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<IntroScreen>(true),
-                Lifetime.Scoped, Resolution.Eager);
+            containerBuilder.RegisterValue(_enemyConfig);
+            containerBuilder.RegisterType(typeof(EnemyRegistry), Lifetime.Scoped, Resolution.Lazy);
+            containerBuilder.RegisterValue(_enemyFactory);
+            containerBuilder.RegisterValue(_enemySpawner);
+
+            containerBuilder.RegisterValue(_projectileConfig);
+            containerBuilder.RegisterValue(_projectileFactory);
             
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<LoseScreen>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<WinScreen>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<ProgressBar>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<WinConditionObserver>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<GameFlowController>(true),
-                Lifetime.Scoped, Resolution.Eager);
-            
-            containerBuilder.RegisterFactory(_ => GetComponentInChildren<ProjectileFactory>(true),
-                Lifetime.Scoped, Resolution.Eager);
+            containerBuilder.RegisterType(typeof(GameFlow), Lifetime.Scoped, Resolution.Eager);
         }
     }
 }

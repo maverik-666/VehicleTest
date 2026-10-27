@@ -109,7 +109,7 @@ namespace Project
                 .SetLoops(2, LoopType.Yoyo);
         }
 
-        public void Reset()
+        public void ResetState()
         {
             _isShooting = false;
             _rotatingTransform.rotation = Quaternion.identity;

@@ -1,6 +1,8 @@
 namespace Project
 {
     using Reflex.Attributes;
+    using Reflex.Core;
+    using Reflex.Injectors;
     using UnityEngine;
     using UnityEngine.Pool;
     using Random = UnityEngine.Random;
@@ -12,34 +14,30 @@ namespace Project
         [SerializeField]
         private Projectile _projectilePf;
 
-        [SerializeField]
-        private int _defaultCapacity = 5;
+        private Container _container;
         
-        [SerializeField]
-        private int _maxSize = 20;
-
-        private EnemyRegistry _enemyRegistry;
         private ObjectPool<Projectile> _pool;
 
         [Inject]
-        private void Construct(EnemyRegistry enemyRegistry)
+        private void Construct(Container container, ProjectileConfig projectileConfig)
         {
-            _enemyRegistry = enemyRegistry;
+            _container = container;
+            
             _pool = new ObjectPool<Projectile>(
                 PoolCreate, 
                 PoolGet,
                 PoolRelease,
                 PoolDestroy,
                 true,
-                _defaultCapacity,
-                _maxSize);
+                projectileConfig.PoolCapacity,
+                projectileConfig.PoolMaxSize);
         }
         
         private Projectile PoolCreate()
         {
-            var projectile = Instantiate(_projectilePf,  Vector3.zero, Quaternion.Euler(0, Random.Range(0, 360), 0), transform); 
-            projectile.Init(_enemyRegistry, Release);
-            
+            var projectile = Instantiate(_projectilePf,  Vector3.zero, Quaternion.Euler(0, Random.Range(0, 360), 0), transform);
+            GameObjectInjector.InjectRecursive(projectile.gameObject, _container);
+            projectile.ReturnToPool += Release;
             projectile.gameObject.SetActive(false);
             
             return projectile;
@@ -47,7 +45,7 @@ namespace Project
         
         private void PoolGet(Projectile projectile)
         {
-            projectile.Reset();
+            projectile.ResetState();
         }
 
         private void PoolRelease(Projectile projectile)
@@ -57,6 +55,7 @@ namespace Project
 
         private void PoolDestroy(Projectile projectile)
         {
+            projectile.ReturnToPool -= Release;
             Destroy(projectile.gameObject);
         }
         

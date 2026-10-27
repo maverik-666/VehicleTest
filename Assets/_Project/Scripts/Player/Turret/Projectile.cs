@@ -2,6 +2,7 @@ namespace Project
 {
     using System;
     using DG.Tweening;
+    using Reflex.Attributes;
     using UnityEngine;
 
     [DisallowMultipleComponent]
@@ -18,9 +19,6 @@ namespace Project
         private float _speed = 20;
 
         [SerializeField]
-        private int _maxSpeedPerStep = 10;
-        
-        [SerializeField]
         private int _attackDamage = 50;
 
         [SerializeField]
@@ -29,21 +27,22 @@ namespace Project
         [SerializeField]
         private float _autoReleaseDistance = 100;
 
-        private Vector2 _startPosition2d;
+        private Vector2 _startPositionXZ;
         private EnemyRegistry _enemyRegistry;
-        private Action<Projectile> _returnToPool;
 
         private bool _isDepleted = true;
-            
-        public void Init(EnemyRegistry enemyRegistry, Action<Projectile> returnToPool)
+
+        public event Action<Projectile> ReturnToPool;
+        
+        [Inject]
+        private void Construct(EnemyRegistry enemyRegistry)
         {
             _enemyRegistry = enemyRegistry;
-            _returnToPool = returnToPool;
         }
 
         public void Launch(Vector3 position, Vector3 direction)
         {
-            _startPosition2d = new Vector2(position.x, position.z); 
+            _startPositionXZ = position.ToXZ(); 
             
             transform.position = position;
             transform.forward = direction;
@@ -58,50 +57,56 @@ namespace Project
                 return;
             }
 
-            float steps = _speed / _maxSpeedPerStep;
-            for (int i = 0; i < steps; i++)
-            { 
-                if (i + 1 > steps)
-                { 
-                    MoveForward(steps - Mathf.FloorToInt(steps) * _maxSpeedPerStep);
-                }
-                else
-                { 
-                    MoveForward(i + 1 * _maxSpeedPerStep);
-                }
-
-                if (_isDepleted)
-                {
-                    return;
-                }
-            }
-        }
-
-        private void MoveForward(float speed)
-        {
-            transform.position += transform.forward * (speed * Time.deltaTime);
-
-            var position2d = new Vector2(transform.position.x, transform.position.z);
-
-            if (Vector2.Distance(position2d, _startPosition2d) > _autoReleaseDistance)
+            Vector3 start = transform.position;
+            Vector3 end = start + transform.forward * (_speed * Time.deltaTime);
+            
+            if(TryHitEnemy(start, end, out var enemy, out var hitPoint))
             {
-                Release();
+                transform.position = hitPoint;
+                HitEnemy(enemy);
                 return;
             }
             
-            for (int i = _enemyRegistry.Count - 1; i >= 0; i--)
+            transform.position = end;
+            
+            if ((end.ToXZ() - _startPositionXZ).sqrMagnitude > _autoReleaseDistance * _autoReleaseDistance)
             {
-                var enemy = _enemyRegistry.Items[i];
-                var enemyPosition2d = new Vector2(enemy.Position.x, enemy.Position.z); 
-                
-                if (Vector2.Distance(position2d, enemyPosition2d) - enemy.Radius - _radius < 0)
-                {
-                    HitEnemy(enemy);
-                    return;
-                }
+                Release();
             }
         }
 
+        private bool TryHitEnemy(Vector3 start, Vector3 end, out Enemy hitEnemy, out Vector3 hitPoint)
+        {
+            Vector2 a = start.ToXZ();
+            Vector2 ab = end.ToXZ() - a;
+            float abSqr = ab.sqrMagnitude;
+
+            bool hitAny = false;
+            hitEnemy = null;
+            float closestT = 1;
+            
+            for (int i = 0; i < _enemyRegistry.Count; i++)
+            {
+                var enemy = _enemyRegistry.Items[i];
+                Vector2 center = enemy.Position.ToXZ();
+                
+                float t = abSqr > 0 ? Mathf.Clamp01(Vector2.Dot(center - a, ab) / abSqr) : 0;
+                Vector2 closestPoint = a + ab * t;
+                
+                float hitRadius = enemy.Radius + _radius;
+                if ((center - closestPoint).sqrMagnitude < hitRadius * hitRadius && t <= closestT)
+                {
+                    closestT = t;
+                    hitEnemy = enemy;
+                    hitAny = true;
+                }
+            }
+            
+            hitPoint = Vector3.Lerp(start, end, closestT);
+            
+            return hitAny;
+        }
+        
         private void HitEnemy(Enemy enemy)
         {
             enemy.TakeDamage(_attackDamage);
@@ -118,17 +123,17 @@ namespace Project
 
             DOTween.Sequence().SetLink(gameObject, LinkBehaviour.KillOnDestroy)
                 .AppendInterval(5)
-                .AppendCallback(ReturnToPool);
+                .AppendCallback(Dispose);
         }
 
-        private void ReturnToPool()
+        private void Dispose()
         {
-            _returnToPool.Invoke(this);
+            ReturnToPool?.Invoke(this);
         }
         
-        public void Reset()
+        public void ResetState()
         {
-            
+            _isDepleted = false;
         }
     }
 }

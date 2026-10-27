@@ -1,7 +1,6 @@
 namespace Project
 {
     using System;
-    using DG.Tweening;
     using Reflex.Attributes;
     using Unity.Behavior;
     using UnityEngine;
@@ -10,55 +9,72 @@ namespace Project
     [RequireComponent(typeof(BehaviorGraphAgent))]
     public class Enemy : MonoBehaviour
     {
+        private static readonly string CanAggroId = "CanAggro";
+        
         [SerializeField]
         private Health _health = new Health(100);
 
         [SerializeField]
+        private HealthBar _healthBar;
+        
+        [SerializeField]
         private int _attackDamage = 15;
 
         [SerializeField]
-        private float _radius = 0.5f;
+        private float _wanderingSpeed = 0.75f;
 
         [SerializeField]
-        private HealthBar _healthBar;
+        private float _chasingSpeed = 5;
+
+        [SerializeField]
+        private float _visionDistance = 20;
         
-        private Action<Enemy> _returnToPool;
-        
+        [SerializeField]
+        private float _radius = 0.5f;
+
+     
         private Player _player;
         private BehaviorGraphAgent _agent;
         private EnemySkinRenderer _skinRenderer;
 
+        public event Action<Enemy> ReturnToPool; 
+        
         public Vector3 Position => transform.position;
 
         public float Radius => _radius;
 
         public bool IsDead => _health.IsDead;
-        
-        public void Init(Player player, Action<Enemy> returnToPool)
+
+        [Inject]
+        private void Construct(Player player)
+        {
+            _player = player;
+        }
+
+        private void Awake()
         {
             _healthBar.Init(_health);
             _healthBar.HideInstant();
             
-            _player = player;
-            _returnToPool = returnToPool;
-            
             _agent = GetComponent<BehaviorGraphAgent>();
-            _agent.Init();
-
-            _agent.BlackboardReference.SetVariableValue("Player", _player.gameObject);
             
             _skinRenderer = GetComponentInChildren<EnemySkinRenderer>(true);
             _skinRenderer.Init(OnHitLanded);
         }
 
+        private void Start()
+        {
+            _agent.BlackboardReference.SetVariableValue("Player", _player.gameObject);
+        }
+
         public void StartPatrol()
         { 
-            _agent.BlackboardReference.SetVariableValue("CanAggro", true);
+            _agent.BlackboardReference.SetVariableValue(CanAggroId, true);
         }
         
         public void DisablePatrol()
         { 
-            _agent.BlackboardReference.SetVariableValue("CanAggro", false);
+            _agent.BlackboardReference.SetVariableValue(CanAggroId, false);
         }
         
         public void AttackPlayer()
@@ -87,17 +103,17 @@ namespace Project
             }
         }
         
-        public void Reset()
+        public void ResetState()
         {
             _health.SetCurrentHealth(_health.Max);
             _healthBar.HideInstant();
             _healthBar.UpdateHealthInstant();
             
-            _agent.BlackboardReference.SetVariableValue("CanPatrol", false);
+            _agent.BlackboardReference.SetVariableValue(CanAggroId, false);
             _agent.Restart();
             _agent.enabled = true;
             
-            _skinRenderer.Reset();
+            _skinRenderer.ResetState();
         }
 
         public void Die()
@@ -120,7 +136,7 @@ namespace Project
         
         private void Dispose()
         {
-            _returnToPool.Invoke(this);
+            ReturnToPool?.Invoke(this);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Project
             }
         }
 
-        public void Reset()
+        public void ResetState()
         {
             _current = 0;
         }
