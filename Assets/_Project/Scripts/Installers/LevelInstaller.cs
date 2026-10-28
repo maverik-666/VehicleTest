@@ -38,7 +38,7 @@ namespace Project
         
         [SerializeField]
         private WinConditionObserver _winConditionObserver;
-
+        
         [Header("Enemy")]
         [SerializeField]
         private EnemyConfig _enemyConfig;
@@ -49,6 +49,9 @@ namespace Project
         [SerializeField]
         private EnemySpawner _enemySpawner;
 
+        [SerializeField]
+        private EnemyCollisionResolver _enemyCollisionResolver;
+        
         [Header("Projectile")]
         [SerializeField]
         private ProjectileConfig _projectileConfig;
@@ -75,6 +78,8 @@ namespace Project
             containerBuilder.RegisterType(typeof(EnemyRegistry), Lifetime.Scoped, Resolution.Lazy);
             containerBuilder.RegisterValue(_enemyFactory);
             containerBuilder.RegisterValue(_enemySpawner);
+            
+            containerBuilder.RegisterValue(_enemyCollisionResolver);
 
             containerBuilder.RegisterValue(_projectileConfig);
             containerBuilder.RegisterValue(_projectileFactory);

@@ -3,23 +3,21 @@ namespace Project
     using System;
 
     public class GameFlow : IDisposable
-    {
-        private GameState _gameState;
-
+    { 
         private readonly Cover _cover;
-        
         private readonly IntroScreen _introScreen;
-        
         private readonly LoseScreen _loseScreen;
-
         private readonly WinScreen _winScreen;
-
-        private readonly WinConditionObserver _winConditionObserver;
         
         private readonly InputHandler _inputHandler;
+
+        private readonly Player _player;
+        private readonly WinConditionObserver _winConditionObserver;
         
         private readonly EnemySpawner _enemySpawner;
-        private readonly Player _player;
+        private readonly EnemyCollisionResolver _enemyCollisionResolver;
+        
+        private GameState _gameState;
         
         public GameFlow( 
             Cover cover,
@@ -29,7 +27,8 @@ namespace Project
             InputHandler inputHandler,
             WinConditionObserver winConditionObserver,
             Player player, 
-            EnemySpawner enemySpawner)
+            EnemySpawner enemySpawner,
+            EnemyCollisionResolver enemyCollisionResolver)
         {
             _gameState = GameState.Intro;
 
@@ -49,6 +48,7 @@ namespace Project
             _player.Died += OnPlayerDied;
 
             _enemySpawner = enemySpawner;
+            _enemyCollisionResolver = enemyCollisionResolver;
         }
         
         public void Dispose()
@@ -96,6 +96,8 @@ namespace Project
             _enemySpawner.EnablePatrol();
             _enemySpawner.EnableSpawn();
             
+            _enemyCollisionResolver.Activate();
+            
             _player.Activate();
             _winConditionObserver.StartObserving();
         }
@@ -110,6 +112,7 @@ namespace Project
         {
             _gameState = GameState.Lose;
             _enemySpawner.DisablePatrol();
+            _enemyCollisionResolver.Deactivate();
             
             _winConditionObserver.StopObserving();
             _loseScreen.Show();
@@ -132,6 +135,7 @@ namespace Project
             
             _enemySpawner.DisablePatrol();
             _enemySpawner.DisableSpawn();
+            _enemyCollisionResolver.Deactivate();
             
             _player.Deactivate();
             

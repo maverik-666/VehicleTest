@@ -2,90 +2,89 @@ namespace Project
 {
     using System;
     using Reflex.Attributes;
-    using Unity.Behavior;
     using UnityEngine;
+    using UnityEngine.AI;
 
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(BehaviorGraphAgent))]
+    [RequireComponent(typeof(Transform))]
     public class Enemy : MonoBehaviour
     {
-        private static readonly string CanAggroId = "CanAggro";
-        
-        [SerializeField]
-        private Health _health = new Health(100);
-
         [SerializeField]
         private HealthBar _healthBar;
+
+        private EnemyConfig _config;
+        private EnemyBrain _brain;
+        private Health _health;
         
-        [SerializeField]
-        private int _attackDamage = 15;
-
-        [SerializeField]
-        private float _wanderingSpeed = 0.75f;
-
-        [SerializeField]
-        private float _chasingSpeed = 5;
-
-        [SerializeField]
-        private float _visionDistance = 20;
-        
-        [SerializeField]
-        private float _radius = 0.5f;
-
-     
-        private Player _player;
-        private BehaviorGraphAgent _agent;
+        private NavMeshAgent _navMeshAgent;
         private EnemySkinRenderer _skinRenderer;
-
+        
         public event Action<Enemy> ReturnToPool; 
         
         public Vector3 Position => transform.position;
 
-        public float Radius => _radius;
+        public float Radius => _config.Radius;
 
-        public bool IsDead => _health.IsDead;
+        public int AttackDamage => _config.AttackDamage;
 
         [Inject]
-        private void Construct(Player player)
+        private void Construct(EnemyConfig config, Player player)
         {
-            _player = player;
-        }
-
-        private void Awake()
-        {
-            _healthBar.Init(_health);
-            _healthBar.HideInstant();
+            _config = config;
+            _health = new Health(config.Health);
             
-            _agent = GetComponent<BehaviorGraphAgent>();
+            _healthBar.Init(_health);
+            
+            _navMeshAgent = GetComponentInChildren<NavMeshAgent>(true);
             
             _skinRenderer = GetComponentInChildren<EnemySkinRenderer>(true);
-            _skinRenderer.Init(OnHitLanded);
+            _skinRenderer.Init(OnAttackEnded);
+            
+            _brain = new EnemyBrain(this, _config, player);
         }
-
-        private void Start()
+        
+        private void Update()
         {
-            _agent.BlackboardReference.SetVariableValue("Player", _player.gameObject);
+            _brain.Tick(Time.deltaTime);
+        }
+        
+        public void Idle()
+        {
+            _skinRenderer.AnimateIdle();
         }
 
-        public void StartPatrol()
-        { 
-            _agent.BlackboardReference.SetVariableValue(CanAggroId, true);
+        public void WalkTo(Vector3 position)
+        {
+            _navMeshAgent.speed = _config.WalkingSpeed;
+            _navMeshAgent.SetDestination(position);
+            _skinRenderer.AnimateWalk();
+        }
+
+        public void RunTo(Vector3 position)
+        {
+            _navMeshAgent.speed = _config.RunningSpeed;
+            _navMeshAgent.SetDestination(position);
+            _skinRenderer.AnimateRun();
         }
         
-        public void DisablePatrol()
-        { 
-            _agent.BlackboardReference.SetVariableValue(CanAggroId, false);
-        }
-        
-        public void AttackPlayer()
+        public void Attack()
         {
             _skinRenderer.AnimateAttack();
         }
 
-        private void OnHitLanded()
+        private void OnAttackEnded()
         {
-            _player.TakeDamage(_attackDamage);
-            Die();
+            _brain.OnAttackEnded();
+        }
+        
+        public void EnableAggro()
+        { 
+            _brain.EnableAggro();
+        }
+        
+        public void DisableAggro()
+        { 
+            _brain.DisableAggro();
         }
         
         public void TakeDamage(int damage)
@@ -97,39 +96,59 @@ namespace Project
             
             _skinRenderer.AnimateTakeDamage();
 
+            _brain.OnTakeDamage();
+            
             if (_health.IsDead)
             {
                 Die();
             }
         }
         
+        public bool HasReachedDestination()
+        {
+            return !_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + 0.1f;
+        }
+
+        public void Spawn(Vector3 position)
+        {
+            gameObject.SetActive(true);
+            
+            if (!_navMeshAgent.Warp(position))
+            {
+                Debug.LogWarning($"Enemy spawned off NavMesh at {position}", this);
+            }
+
+            _navMeshAgent.isStopped = false;
+            
+            _brain.Spawn(position);
+        }
+
         public void ResetState()
         {
             _health.SetCurrentHealth(_health.Max);
             _healthBar.HideInstant();
             _healthBar.UpdateHealthInstant();
-            
-            _agent.BlackboardReference.SetVariableValue(CanAggroId, false);
-            _agent.Restart();
-            _agent.enabled = true;
-            
+
             _skinRenderer.ResetState();
         }
 
         public void Die()
         {
+            _brain.Stop();
+            _navMeshAgent.ResetPath();
+            _navMeshAgent.isStopped = true;
+            
             _skinRenderer.AnimateDeath();
             _healthBar.Hide();
-            _agent.End();
-            _agent.enabled = false;
 
             Dispose();
         }
 
         public void DieSilent()
         {
-            _agent.End();
-            _agent.enabled = false;
+            _brain.Stop();
+            _navMeshAgent.ResetPath();
+            _navMeshAgent.isStopped = true;
             
             Dispose();
         }

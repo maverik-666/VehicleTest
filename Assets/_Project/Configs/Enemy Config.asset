@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb55c844b8a4ad8977f4886b30f09ad, type: 3}
   m_Name: Enemy Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.EnemyConfig
+  Health: 100
+  Radius: 0.5
+  WalkingSpeed: 0.75
+  RunningSpeed: 4
+  VisionDistance: 20
+  AttackDistance: 5
+  AttackDamage: 15
+  WanderRadius: 3
+  WanderWaitRange: {x: 1, y: 3}
   RegistryCapacity: 50
   PoolCapacity: 50
   PoolMaxSize: 200

@@ -9,7 +9,9 @@ namespace Project
     {
         private static readonly int TakeDamageId = Animator.StringToHash("TakeDamage");
         private static readonly int AttackId = Animator.StringToHash("Attack");
-        
+        private static readonly int MovingId = Animator.StringToHash("Moving");
+        private static readonly int RunningId = Animator.StringToHash("Running");
+
         [SerializeField]
         private ParticleSystem _damageVfx;
         
@@ -25,18 +27,37 @@ namespace Project
         private Renderer _renderer;
         private MaterialFlasher _materialFlasher;
         
-        private Action _hitLanded;
+        private Action _attackEnded;
         private Animator _animator;
         
-        public void Init(Action hitLanded)
+        public void Init(Action attackEnded)
         {
             _renderer = GetComponentInChildren<Renderer>(true);
             
-            _hitLanded = hitLanded;
+            _attackEnded = attackEnded;
             _materialFlasher = new MaterialFlasher(gameObject, _renderer);
             
             _animator = GetComponent<Animator>();
             _animator.SetLayerWeight(1, 0);
+        }
+
+        public void AnimateWalk()
+        {
+            _animator.SetBool(MovingId, true);
+            _animator.SetBool(RunningId, false);
+        }
+        
+
+        public void AnimateIdle()
+        {
+            _animator.SetBool(MovingId, false);
+            _animator.SetBool(RunningId, false);
+        }
+
+        public void AnimateRun()
+        {
+            _animator.SetBool(MovingId, true);
+            _animator.SetBool(RunningId, true);
         }
         
         public void AnimateTakeDamage()
@@ -54,11 +75,6 @@ namespace Project
             _animator.Play(AttackId, 1, 0);
         }
 
-        public void OnHitLanded()
-        {
-            _hitLanded?.Invoke();
-        }
-
         public void OnTakeDamageAnimationEnded()
         {
             _animator.SetLayerWeight(1, 0);
@@ -66,6 +82,7 @@ namespace Project
         
         public void OnAttackAnimationEnded()
         {
+            _attackEnded?.Invoke();
             _animator.SetLayerWeight(1, 0);
         }
         

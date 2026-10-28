@@ -56,7 +56,7 @@ namespace Project
         {
             _vehicle.Die();
             _turret.StopShooting();
-            Died.Invoke();
+            Died?.Invoke();
         }
 
         public void SetAim(Vector3 direction)

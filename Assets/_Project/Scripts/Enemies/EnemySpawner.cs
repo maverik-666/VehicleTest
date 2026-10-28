@@ -101,7 +101,7 @@ namespace Project
 
             if (_isPatrolEnabled)
             {
-                enemy.StartPatrol();
+                enemy.EnableAggro();
             }
         }
 
@@ -110,7 +110,7 @@ namespace Project
             _isPatrolEnabled = true;
             foreach (var enemy in _enemyRegistry.Items)
             {
-                enemy.StartPatrol();
+                enemy.EnableAggro();
             }
         }
 
@@ -130,7 +130,7 @@ namespace Project
             _isPatrolEnabled = false;
             foreach (var enemy in _enemyRegistry.Items)
             {
-                enemy.DisablePatrol();
+                enemy.DisableAggro();
             }
         }
 

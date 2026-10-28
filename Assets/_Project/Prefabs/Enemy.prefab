@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2711786525979678633}
   - component: {fileID: 3495997663914149374}
-  - component: {fileID: 5570745970038030851}
   - component: {fileID: 2411975342763726920}
   m_Layer: 0
   m_Name: Enemy
@@ -48,104 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0a8134f78349feae31f7d3ea5185c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Enemy
-  _health:
-    _current: 100
-    _max: 100
-  _attackDamage: 15
-  _radius: 0.5
   _healthBar: {fileID: 8709666989888430604}
---- !u!114 &5570745970038030851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1739590356810889235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
-  m_Graph: {fileID: -4712897888489313030, guid: ea0af42c8e36d594db4fb034944d8984, type: 2}
-  m_BlackboardVariableOverridesList:
-  - rid: 4860037663547195793
-  - rid: 4860037669617140324
-  - rid: 4860037669617140326
-  - rid: 4860037686653616360
-  - rid: 4860037690474889556
-  - rid: 4860037702607175942
-  - rid: 4860037702607175943
-  - rid: 4860037702607175968
-  m_OriginalGraph: {fileID: -4712897888489313030, guid: ea0af42c8e36d594db4fb034944d8984, type: 2}
-  m_IsInitialised: 0
-  m_IsStarted: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: 4860037663547195793
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        m_Value: {fileID: 1739590356810889235}
-    - rid: 4860037669617140324
-      type: {class: 'BlackboardVariable`1[[UnityEngine.Animator, UnityEngine.AnimationModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 13427939949469936243
-          m_Value1: 14753029788100074739
-        Name: Animator
-        m_Value: {fileID: 604700085523244945}
-    - rid: 4860037669617140326
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1768517022491466696
-          m_Value1: 1359198594303956993
-        Name: PartolRadius
-        m_Value: 3
-    - rid: 4860037686653616360
-      type: {class: 'BlackboardVariable`1[[Project.Enemy, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1714439713019398753
-          m_Value1: 9828134723137429211
-        Name: Enemy
-        m_Value: {fileID: 3495997663914149374}
-    - rid: 4860037690474889556
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 12691073512317174563
-          m_Value1: 4230117757837082528
-        Name: PatrolSpeed
-        m_Value: 0.75
-    - rid: 4860037702607175942
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 16985476878216895679
-          m_Value1: 2604163177346518234
-        Name: AttackDistance
-        m_Value: 5
-    - rid: 4860037702607175943
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 5965715272727543289
-          m_Value1: 10661971493225888693
-        Name: ChaseSpeed
-        m_Value: 4
-    - rid: 4860037702607175968
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 2658143626288443527
-          m_Value1: 6769336428712311229
-        Name: Vision
-        m_Value: 20
 --- !u!195 &2411975342763726920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -945,11 +847,6 @@ PrefabInstance:
       insertIndex: 1
       addedObject: {fileID: 1748893211158611721}
   m_SourcePrefab: {fileID: 100100000, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
---- !u!95 &604700085523244945 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}
-  m_PrefabInstance: {fileID: 6417284427881273856}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6183354319909119825 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 543345e5feb19ff49ac2142c0170717f, type: 3}

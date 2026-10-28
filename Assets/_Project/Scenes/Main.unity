@@ -1018,7 +1018,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43055557872541e99b766d8b2a6e94ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.EnemyCollisionUseCase
-  _collisionDamage: 15
 --- !u!1 &1329310022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1088,6 +1087,7 @@ MonoBehaviour:
   _enemyConfig: {fileID: 11400000, guid: 050f6a04d63b1c94f82921303bbc7728, type: 2}
   _enemyFactory: {fileID: 1936576764}
   _enemySpawner: {fileID: 744300171}
+  _enemyCollisionResolver: {fileID: 976186812}
   _projectileConfig: {fileID: 11400000, guid: 1c5e164210d175d43855a948d01e4d77, type: 2}
   _projectileFactory: {fileID: 507209644}
 --- !u!4 &1354543473 stripped

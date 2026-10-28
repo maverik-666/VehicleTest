@@ -7,9 +7,6 @@ namespace Project
     [RequireComponent(typeof(Transform))]
     public class EnemyCollisionResolver : MonoBehaviour
     {
-        [SerializeField]
-        private int _collisionDamage = 15;
-
         private Player _player;
         private EnemyRegistry _enemyRegistry;
         
@@ -20,17 +17,31 @@ namespace Project
             _enemyRegistry = enemyRegistry;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
+            var playerBounds = _player.Bounds;
             for (int i = _enemyRegistry.Items.Count - 1; i >= 0; i--)
             {
                 var enemy = _enemyRegistry.Items[i];
-                if (_player.Bounds.Contains(enemy.Position))
+                var bounds = new Bounds(playerBounds.center, playerBounds.size);
+                bounds.Expand(enemy.Radius * 2f);
+                
+                if (bounds.Contains(enemy.Position))
                 {
-                    _player.TakeDamage(_collisionDamage);
+                    _player.TakeDamage(enemy.AttackDamage);
                     enemy.Die();
                 }
             }
+        }
+        
+        public void Activate()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Deactivate()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

@@ -69,8 +69,7 @@ namespace Project
         public Enemy Create(Vector3 position)
         {
             var enemy = _pool.Get();
-            enemy.transform.position = position;
-            enemy.gameObject.SetActive(true);
+            enemy.Spawn(position);
             
             _enemyRegistry.Add(enemy);
             
